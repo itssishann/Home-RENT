@@ -6,7 +6,7 @@ import Loader from '../components/Loader'; // Ensure you have this component cre
 import Footer from './Footer';
 import 'animate.css';
 import baseURL from '../config';
- export default function Login  ()  {
+ export default function AdminLogin  ()  {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,7 +16,7 @@ import baseURL from '../config';
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      navigate('/dashboard');
+      navigate('/admin/dashboard');
     }
   }, [navigate]);
 
@@ -37,7 +37,7 @@ import baseURL from '../config';
       localStorage.setItem('token', response.data.token);
       toast.success('Login Success');
       setTimeout(() => {
-        navigate('/dashboard');
+        navigate('/admin/dashboard');
       }, 800);
     } catch (error) {
       toast.error(error.response.data.message);

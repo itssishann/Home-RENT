@@ -38,11 +38,17 @@ router.use("/admin", verifyAdminToken);
 
 router.get("/admin/users", async (req, res) => {  // Ensure this route uses the middleware
   try {
-    const users = await User.find({});
+    const users = await User.find({userRole:"isUser"});
+    const userData = users.map((user) => ({
+      Id: user._id,
+      roomId: user.roomId, // Make sure the property name matches the actual field name
+      name: user.name,
+    }));
     res.json({
       message: "Success",
-      data: users
-    });
+
+      data:userData
+  });
   } catch (error) {
     res.status(500).json({
       message: "Failure Internal Server Error",
@@ -54,10 +60,11 @@ router.get("/admin/users", async (req, res) => {  // Ensure this route uses the 
 router.post("/admin/add-unit", async (req, res) => {  // Ensure this route uses the middleware
   const electricityAddBody = zod.object({
     userId: zod.string(),
+    renterName:zod.string(),
     billingPeriodStart: zod.string(),
     billingPeriodEnd: zod.string(),
     unitsConsumed: zod.number(),
-    amountDue: zod.number()
+    amountDue: zod.string()
   });
 
   const result = electricityAddBody.safeParse(req.body);
@@ -71,6 +78,7 @@ router.post("/admin/add-unit", async (req, res) => {  // Ensure this route uses 
       userId: result.data.userId,
       billingPeriodStart: result.data.billingPeriodStart,
       billingPeriodEnd: result.data.billingPeriodEnd,
+      renterName:result.data.renterName,
       unitsConsumed: result.data.unitsConsumed,
       amountDue: result.data.amountDue
     });

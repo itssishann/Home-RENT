@@ -20,7 +20,11 @@ const electricityBillSchema = new mongoose.Schema({
     required: true,
   },
   amountDue: {
-    type: Number,
+    type: String,
+    required: true,
+  },
+  renterName:{
+    type: String,
     required: true,
   },
   paid: {
